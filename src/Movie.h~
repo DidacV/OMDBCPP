@@ -6,7 +6,6 @@
  */
 #pragma once
 #include <iomanip>
-#include "Ratings.h"
 
 class Movie {
 private:
@@ -22,8 +21,7 @@ private:
     };
     Genres genre = {0};
     std::string title, age_rating;
-    int date, duration, avg_rating, total_rating;
-    friend void Ratings::ratings_to_db();
+    int date, duration, avg_rating, no_of_ratings;
 public:
     inline std::string get_title() const;
     inline int get_date() const;
@@ -31,9 +29,13 @@ public:
     inline std::string get_genres() const;
     inline int get_duration() const;
     inline int get_avg_rating() const;
-    inline int get_total_rating() const;
+    inline int get_no_of_ratings() const;
+    inline void set_rating(const int &count, const int &total);
     //inline void add_total_rating(); 
     //Movie(const Movie& orig);
+
+    friend bool operator>(const Movie &m_a, const Movie &m_b);
+    friend bool operator<(const Movie &m_a, const Movie &m_b);
     Movie();
     Movie(std::string title, int date, std::string age_rating, std::string genres, 
         int duration, int avg_rating, int total_rating);
@@ -84,9 +86,20 @@ inline int Movie::get_duration() const { return duration; }
 
 inline int Movie::get_avg_rating() const { return avg_rating; }
 
-inline int Movie::get_total_rating() const{ return total_rating; }
+inline int Movie::get_no_of_ratings() const{ return no_of_ratings; }
 
-inline bool operator>(const Movie &m_a, const Movie &m_b) {return m_a.get_title() > m_b.get_title();}
+/** Sets rating of movie. To be called by MovieDatabase's apply_ratings **/
+inline void Movie::set_rating(const int &count, const int &total)
+{
+    // how many and total
+    //std::cout << count << " " << total << std::endl;
+    no_of_ratings = count;
+    avg_rating = total / count;
+}
+
+inline bool operator>(const Movie &m_a, const Movie &m_b) {return (m_a.date > m_b.date);}
+
+inline bool operator<(const Movie &m_a, const Movie &m_b) {return (m_a.date < m_b.date);}
 
 inline std::ostream& operator<<(std::ostream &output, const Movie &movie)
 {
@@ -100,7 +113,7 @@ inline std::ostream& operator<<(std::ostream &output, const Movie &movie)
                     << std::quoted(movie.get_genres()) << comma
                     << movie.duration << comma
                     << movie.avg_rating << comma
-                    << movie.total_rating << std::endl;
+                    << movie.no_of_ratings << std::endl;
 }
 
 std::istream& operator>>(std::istream &input, Movie &m);
