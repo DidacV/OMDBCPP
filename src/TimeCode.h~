@@ -1,0 +1,47 @@
+ /* 
+ * File:   TimeCode.h
+ * Author: Didac
+ *
+ * Created on 14 April 2017, 13:32
+ */
+#pragma once
+
+#include <iomanip>
+
+
+class TimeCode {
+private:
+    int day, month, year, hour, minute, second;
+public:
+    TimeCode();
+    TimeCode(const TimeCode& orig);
+    TimeCode(int day, int month, int year, int hour, int minute, int second);
+    virtual ~TimeCode();
+    
+    //general getters
+    inline int get_day() const;
+    inline int get_year() const;
+    inline int get_hour() const;
+    inline int get_minute() const;
+    inline int get_second() const;
+    
+    // get timestamp
+    inline int get_timestamp() const;
+    
+    // overload operators
+    friend std::ostream& operator<<(std::ostream &os, const TimeCode &t);
+    
+};
+
+inline std::ostream& operator<<(std::ostream &os, const TimeCode &t)
+{
+    return os << std::setw(2) << std::setfill('0') << t.day << ":"
+              << std::setw(2) << std::setfill('0') << t.month << ":"
+              << std::setw(4) << std::setfill('0') << t.year << ":" << "T"
+              << std::setw(2) << std::setfill('0') << t.hour << ":"
+              << std::setw(2) << std::setfill('0') << t.minute << ":"
+              << std::setw(2) << std::setfill('0') << t.second << ":" << "Z"
+	      << std::endl;
+}
+
+std::istream& operator>>(std::istream &is, TimeCode &t);

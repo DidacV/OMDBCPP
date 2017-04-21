@@ -27,3 +27,11 @@ program:$(OBJS)
 .PHONY: clean
 clean:
 	rm -rf $(OBJ_DIR)
+	rm -rf $(BIN_DIR)SRC = $(wildcard src/*.cpp)
+OBJS = $(SRC:.cpp=.o)
+OBJS_DIR = $(addprefix obj/, $(notdir $(OBJS)))
+CC = g++
+DEBUG = -g
+CPPVERSION = -std=c++14
+CFLAGS =  $(CPPVERSION) $(DEBUG) -Wall -c 
+LFLAGS = -Wall $(DEBUG) $(CPPVERSION)

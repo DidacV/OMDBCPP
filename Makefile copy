@@ -1,0 +1,30 @@
+OBJS = MovieDatabase.o Movie.o Ratings.o Rating.o TimeCode.o main.o
+CC = g++
+DEBUG = -g
+CPPVERSION = -std=c++14
+CFLAGS = -Wall -c $(DEBUG) $(CPPVERSION)
+LFLAGS = -Wall $(DEBUG) $(CPPVERSION)
+
+omdb : $(OBJS)
+	$(CC) $(LFLAGS) $(OBJS) -o omdb
+
+main.o : main.cpp MovieDatabase.h Ratings.h
+	$(CC) $(CFLAGS) main.cpp
+
+Movie.o : Movie.h Movie.cpp
+	$(CC) $(CFLAGS) Movie.cpp
+
+MovieDatabase.o : MovieDatabase.h MovieDatabase.cpp Movie.h
+	$(CC) $(CFLAGS) MovieDatabase.cpp
+
+Ratings.o : Ratings.h Ratings.cpp Rating.h
+	$(CC) $(CFLAGS) Ratings.cpp
+
+Rating.o: Rating.h Rating.cpp TimeCode.h
+	$(CC) $(CFLAGS) Rating.cpp
+
+TimeCode.o : TimeCode.h TimeCode.cpp
+	$(CC) $(CFLAGS) TimeCode.cpp
+
+clean:
+	\rm *.o *~ omdb

@@ -1,0 +1,53 @@
+/*
+ * File: Ratings.h
+ * Author: Diego Viteri
+ *
+ * Created on 15 April 2017, 13:57
+ */
+#pragma once
+//#include <algorithm>
+//#include <vector>
+#include "Rating.h"
+class Ratings
+{
+private:
+    std::vector<Rating> rating_list;
+public:
+    Ratings();
+    Ratings(const Ratings& orig);
+    ~Ratings();
+    inline void add_rating(const Rating &r);
+    inline int size() const;
+    inline Rating operator[](int i) const;
+    friend std::ostream& operator<<(std::ostream &os, const Ratings &rs);
+};
+
+inline void Ratings::add_rating(const Rating &r)
+{
+    //std::cout << "3 " << r << std::endl;
+    rating_list.push_back(r);
+    //ratings[0] = r;
+    //std::cout << "4 " << rating_list[0] << std::endl;
+}
+
+inline Rating Ratings::operator [](int i) const {return rating_list[i];}
+
+inline int Ratings::size() const {return rating_list.size();}
+inline std::ostream& operator<<(std::ostream &os, const Ratings &rs)
+{
+    int i = 0;
+    for (; i < rs.size(); i++)
+    {
+	os << rs[i];
+    }
+    /*
+    for_each(rs.ratings.begin(), rs.ratings.end(),
+	     [&os](const Rating &r)
+	     {
+		 os << r; 
+	     });
+    */
+    return os;
+}
+
+std::istream& operator>>(std::istream &is, Ratings* &rs);
