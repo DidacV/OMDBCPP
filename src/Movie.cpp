@@ -10,7 +10,6 @@
 #include <iostream>
 #include <sstream>
 
-
 #include "Movie.h"
 /**
  * Constructs a movie with given parameters
@@ -96,8 +95,5 @@ istream& operator>>(istream &input, Movie &movie)
     }
     return input;
 }
-
-
-
 
 

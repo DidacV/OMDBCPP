@@ -5,20 +5,14 @@
  * Created on 11 April 2017, 14:29
  */
 #pragma once
-#include <unordered_map>
 #include <set>
-
 #include "Movie.h"
 #include "Ratings.h"
 
 class MovieDatabase
 {
-
-    //friend void Ratings::apply_ratings(const MovieDatabase &db);
-    
 private:
     std::vector<Movie> movie_list;
-    //std::unordered_map<std::string, Movie> movie_titles;
 public:
     MovieDatabase();
     MovieDatabase(const MovieDatabase& orig);
@@ -26,7 +20,7 @@ public:
     virtual ~MovieDatabase();
 
     template<typename Criteria, typename Compare>
-	Movie retrieve(int pos, const Compare& comp, const Criteria& c) const;
+    Movie retrieve(int pos, const Compare& comp, const Criteria& c) const;
 
     template<typename Compare>
     Movie retrieve(int pos, const Compare& comp) const;
@@ -38,25 +32,33 @@ public:
     void apply_ratings(const Ratings &rs);
     inline void add_movies(const std::vector<Movie> &_movie_list);
     inline void add_movie(const Movie &movie);
-    //void add_ratings(const Ratings &rs);
     inline int size() const;
     inline bool empty() const;
-    //friend std::istream& operator>>(std::istream &is, MovieDatabase &mdb);
-    inline friend std::ostream& operator<<(std::ostream &os, const MovieDatabase &mdb);
+
     
+    inline friend std::ostream& operator<<(std::ostream &os, const MovieDatabase &mdb);
     inline Movie operator[](int i) const;
-    //inline Movie& operator[](int i);
 };
 
 template<typename Compare>
 void MovieDatabase::sort_mdb(const Compare& comp)
 {
-std::sort(movie_list.begin(), movie_list.end(), comp);
+    if (!movie_list.empty())
+    {
+	std::sort(movie_list.begin(), movie_list.end(), comp);
+    }
+    else
+    {
+	std::cerr << "ERROR: Movie Database is empty" << std::endl;
+    }
 }
 
+
 template<typename Criteria, typename Compare>
-    Movie MovieDatabase::retrieve(int pos, const Compare& comp, const Criteria& c) const
+Movie MovieDatabase::retrieve(int pos, const Compare& comp, const Criteria& c) const
 {
+    if (movie_list.empty()) throw "ERROR: Movie Database is empty\n";
+    
     std::multiset<Movie, decltype(comp)> sorted_set(comp);
 
     for (auto movie : movie_list)
@@ -78,6 +80,8 @@ template<typename Criteria, typename Compare>
 template<typename Compare>
 Movie MovieDatabase::retrieve(int pos, const Compare& comp) const
 {
+    if (movie_list.empty()) throw "ERROR: Movie Database is empty\n";
+    
     std::multiset<Movie, decltype(comp)> sorted_set(comp);
 
     for (auto movie : movie_list)

@@ -17,24 +17,16 @@ using namespace std;
 int main(int argc, char** argv) {
     ifstream db_file("res/movies.txt");
     ifstream ratings_file("res/ratings.txt");
-    //shared_ptr<MovieDatabase> db_ptr;
-    //db_ptr = make_shared<MovieDatabase>();
     
     MovieDatabase *db_ptr = new MovieDatabase();
     Ratings *r_ptr = new Ratings();
-    if (db_file.is_open())
-    {
-        db_file >> db_ptr;
-	ratings_file >> r_ptr;
-    }
-    //r_ptr->apply_ratings(*db_ptr);
-    db_ptr->apply_ratings(*r_ptr);
-    //cout << r_ptr->size();
-    //cout << *r_ptr;
-    //cout << *db_ptr;
-    //db_ptr->sort_mdb([](Movie const &m, Movie const &_m){return (m.get_date() > _m.get_date());});
-    //cout << *db_ptr;
-    //auto l = [](Rating const &r, Rating const &_r){ return (r < _r);};
+    
+    if (db_file.is_open()) { db_file >> db_ptr; }
+    else { cerr<<"Couldn't open movies.txt in res/movies.txt"<<endl; return 0;}
+  
+    if (ratings_file.is_open()) { ratings_file >> r_ptr; db_ptr->apply_ratings(*r_ptr); }
+    else {cerr<<"Couldn't open ratings.txt in res/ratings.txt"<<endl;}
+ 
 
     cout<<"//*************************************************************//"<<endl;
     cout<<"//**************             Task 1           *****************//"<<endl;
@@ -58,8 +50,8 @@ int main(int argc, char** argv) {
 	                 {return (m.get_duration() > _m.get_duration());};
     int pos_t2 = 2; // Third (0 index)
 
-    cout << db_ptr->retrieve(pos_t2, comparison_t2, criteria_t2) << endl;
-
+    try { cout << db_ptr->retrieve(pos_t2, comparison_t2, criteria_t2) << endl;}
+    catch (const char* msg){ cerr << msg << endl; }
     
     cout<<"//*************************************************************//"<<endl;
     cout<<"//**************             Task 3           *****************//"<<endl;
@@ -70,8 +62,8 @@ int main(int argc, char** argv) {
 	               {return (m.get_avg_rating() > _m.get_avg_rating());};
     int pos_t3 = 9; // Tenth (0 index)
     
-    cout << db_ptr->retrieve(pos_t3, comparison_t3, criteria_t3) << endl;
-
+    try { cout << db_ptr->retrieve(pos_t3, comparison_t3, criteria_t3) << endl;}
+    catch (const char* msg){ cerr << msg << endl; }
     
     cout<<"//*************************************************************//"<<endl;
     cout<<"//**************             Task 4           *****************//"<<endl;
@@ -80,8 +72,8 @@ int main(int argc, char** argv) {
 	               {return (m.get_avg_rating() > _m.get_avg_rating());};
     //int pos_t3; // 
 
-    cout << db_ptr->retrieve(0, comparison_t4) << endl;
-
+    try { cout << db_ptr->retrieve(0, comparison_t4) << endl;}
+    catch (const char* msg){ cerr << msg << endl; }
     
     cout<<"//*************************************************************//"<<endl;
     cout<<"//**************             Task 5           *****************//"<<endl;
@@ -89,7 +81,8 @@ int main(int argc, char** argv) {
     auto comparison_t5 = [](Movie const &m, Movie const &_m)
 	                 {return (m.get_title().size() > _m.get_title().size());};
 
-    cout << db_ptr->retrieve(0, comparison_t5) << endl;
+    try { cout << db_ptr->retrieve(0, comparison_t5) << endl; }
+    catch (const char* msg){ cerr << msg << endl; }
 
     cout<<"//*************************************************************//"<<endl;
     cout<<"//**************             Task 6           *****************//"<<endl;
@@ -97,28 +90,12 @@ int main(int argc, char** argv) {
     auto comparison_t6 = [](Rating const &r, Rating const &_r)
 	                 {return (r < _r);};
 
-    cout << r_ptr->retrieve(100, comparison_t6) << endl;
-    /****************************************/
-    /****             Task 6           ******/
-    /****************************************/
-    auto comp = [](Movie const &r, Movie const &_r){ return (r.get_duration() > _r.get_duration());};
+    try { cout << r_ptr->retrieve(100, comparison_t6) << endl; }
+    catch (const char* msg){ cerr << msg << endl; }
 
-    //auto criteria = [](Movie *m){return (m->get_genres().find("Sci-Fi")!=string::npos);};
-
-    auto criteria = [](Movie *m){return (m->get_date() == 1984);};
-    //cout << db_ptr->retrieve(criteria);
-    //r_ptr->retrieve(l);
-    
-    //Rating r = r_ptr->retrieve([](Rating &r, Rating &_r){ return (r < _r);});
-    //*[](const pair<string, Rating> &p, const pair<string, Rating> &_p)*/
-	
-    //cout << r;	
-    
-    //cout << *r_ptr;
-    //cout << db_ptr->empty() << endl;;
-    //cout << db_ptr->size() << endl;;
-    //cout << ((*db_ptr)[0] > (*db_ptr)[1]) << endl;
-    
+    // Info
+    cout << "Movies in database: " << db_ptr->size() << endl;
+    cout << "Number of ratings: " << r_ptr->size() << endl;
     delete(db_ptr);
     delete(r_ptr);
     

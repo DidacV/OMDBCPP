@@ -117,4 +117,5 @@ inline std::ostream& operator<<(std::ostream &output, const Movie &movie)
                     << movie.no_of_ratings << std::endl;
 }
 
+
 std::istream& operator>>(std::istream &input, Movie &m);
