@@ -21,14 +21,15 @@ private:
     };
     Genres genre = {0};
     std::string title, age_rating;
-    int date, duration, avg_rating, no_of_ratings;
+    float avg_rating;
+    int date, duration, no_of_ratings;
 public:
     inline std::string get_title() const;
     inline int get_date() const;
     inline std::string get_age_rating() const;
     inline std::string get_genres() const;
     inline int get_duration() const;
-    inline int get_avg_rating() const;
+    inline float get_avg_rating() const;
     inline int get_no_of_ratings() const;
     inline void set_rating(const int &count, const int &total);
     //inline void add_total_rating(); 
@@ -84,7 +85,7 @@ inline std::string Movie::get_genres() const
 /** @return duration of the movie */
 inline int Movie::get_duration() const { return duration; }
 
-inline int Movie::get_avg_rating() const { return avg_rating; }
+inline float Movie::get_avg_rating() const { return avg_rating; }
 
 inline int Movie::get_no_of_ratings() const{ return no_of_ratings; }
 
@@ -94,7 +95,7 @@ inline void Movie::set_rating(const int &count, const int &total)
     // how many and total
     //std::cout << count << " " << total << std::endl;
     no_of_ratings = count;
-    avg_rating = total / count;
+    avg_rating = (float)total / (float)count;
 }
 
 inline bool operator>(const Movie &m_a, const Movie &m_b) {return (m_a.date > m_b.date);}
@@ -112,7 +113,7 @@ inline std::ostream& operator<<(std::ostream &output, const Movie &movie)
                     << std::quoted(movie.age_rating) << comma
                     << std::quoted(movie.get_genres()) << comma
                     << movie.duration << comma
-                    << movie.avg_rating << comma
+		    << std::setprecision(2) << std::fixed << movie.avg_rating << comma
                     << movie.no_of_ratings << std::endl;
 }
 

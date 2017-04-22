@@ -21,7 +21,7 @@
  */
 using namespace std;
 Movie::Movie(string title, int date, string age_rating, string genres, 
-        int duration, int avg_rating, int total_rating)
+        int duration, int avg_rating, int no_of_ratings)
 {
     // Ensure the data you get is correct
     // Name is a string, can hold any characters
@@ -60,12 +60,20 @@ Movie::Movie(string title, int date, string age_rating, string genres,
     
     this->duration = duration;
     this->avg_rating = avg_rating;
-    this->total_rating = total_rating;
+    this->no_of_ratings = no_of_ratings;
 }
 
 Movie::Movie()
 {
     
+}
+
+/**
+ * Destructor
+ */
+Movie::~Movie() 
+{
+    //std::cout << "movie destroyed" << std::endl;
 }
 
 istream& operator>>(istream &input, Movie &movie)
@@ -91,11 +99,5 @@ istream& operator>>(istream &input, Movie &movie)
 
 
 
-/**
- * Destructor
- */
-Movie::~Movie() 
-{
-    //std::cout << "movie destroyed" << std::endl;
-}
+
 

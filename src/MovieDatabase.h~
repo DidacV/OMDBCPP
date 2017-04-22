@@ -25,11 +25,13 @@ public:
     MovieDatabase(std::vector<Movie> movie_list);
     virtual ~MovieDatabase();
 
-template<typename Compare = std::less<Movie>>
-    auto retrieve(Compare& comp = Compare(), int pos = 0) const;
+    template<typename Criteria, typename Compare>
+	Movie retrieve(int pos, const Compare& comp, const Criteria& c) const;
 
-
-template<typename Compare = std::less<Movie>>
+    template<typename Compare>
+    Movie retrieve(int pos, const Compare& comp) const;
+    
+    template<typename Compare = std::less<Movie>>
     void sort_mdb(const Compare& comp = Compare());
 
 
@@ -52,31 +54,46 @@ void MovieDatabase::sort_mdb(const Compare& comp)
 std::sort(movie_list.begin(), movie_list.end(), comp);
 }
 
-template<typename Compare>
-auto MovieDatabase::retrieve(Compare& comp, int pos) const
+template<typename Criteria, typename Compare>
+    Movie MovieDatabase::retrieve(int pos, const Compare& comp, const Criteria& c) const
 {
-    int i = 0;
-    std::set<Movie, decltype(comp)> sorted_set(comp);
+    std::multiset<Movie, decltype(comp)> sorted_set(comp);
 
-	for (auto movie : movie_list)
-	{
-	    sorted_set.insert(movie);
-	}
-if(pos > 0)
-{
-std::set<Movie, decltype(comp)>::iterator it = sorted_set.begin();
-std::advance(it, pos);
-return *it;
-}
-else
-{
-return *sorted_set.begin();
-}
-/*
+    for (auto movie : movie_list)
+    {
+	if(c(&movie)) sorted_set.insert(movie);
+    }
+	/*
     for(auto const& e : sorted_set) {
         std::cout << e;
+	}*/
+    std::set<Movie>::iterator it = sorted_set.begin();
+
+    if(pos > 0) std::advance(it, pos);
+
+    return *it;
+	
+}
+
+template<typename Compare>
+Movie MovieDatabase::retrieve(int pos, const Compare& comp) const
+{
+    std::multiset<Movie, decltype(comp)> sorted_set(comp);
+
+    for (auto movie : movie_list)
+    {
+        sorted_set.insert(movie);
     }
-*/
+	/*
+    for(auto const& e : sorted_set) {
+        std::cout << e;
+	}*/
+    std::set<Movie>::iterator it = sorted_set.begin();
+
+    if(pos > 0) std::advance(it, pos);
+
+    return *it;
+	
 }
 
 inline void MovieDatabase::add_movies(const std::vector<Movie> &_movie_list)

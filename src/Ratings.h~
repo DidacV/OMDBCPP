@@ -33,8 +33,8 @@ public:
     
     //void apply_ratings(MovieDatabase &db);
 
-    template<typename Compare = std::less<Rating>>
-    Rating retrieve(Compare comp = Compare(), int pos = 0) const;
+    template<typename Compare>
+	Rating retrieve(int pos, Compare comp) const;
     
     inline void add_rating(const Rating &r);
     inline int size() const;
@@ -53,18 +53,26 @@ public:
 
 
 template<typename Compare>
-Rating Ratings::retrieve(Compare comp, int pos) const
+Rating Ratings::retrieve(int pos, Compare comp) const
 {
-    std::set <Rating, decltype(comp)> sorted_set(comp);
+    std::multiset <Rating, decltype(comp)> sorted_set(comp);
     for (auto bucket : rating_list)
     {
         // second = rating
         sorted_set.insert(bucket.second);
     }
-    
+
+    /*
     for(auto const& e : sorted_set) {
         std::cout << e << '\n';
-    }
+	}
+    */
+    std::set<Rating>::iterator it = sorted_set.begin();
+
+    if(pos > 0) std::advance(it, pos);
+
+    return *it;
+    
 }
 
 inline Ratings::const_iterator Ratings::begin()
