@@ -10,14 +10,10 @@
 
 using namespace std;
 
-Rating::Rating()
-{
-    //cout << "new rating" << endl;
-}
+Rating::Rating(){}
 
 Rating::Rating(TimeCode &t, string name, string movie_title, int rating)
 {
-    //cout << "new rating" << endl;
     this->t = t;
     this->name = name;
     this->movie_title = movie_title;
@@ -32,10 +28,7 @@ Rating::Rating(const Rating& orig)
     this->rating = orig.rating;
 }
 
-Rating::~Rating()
-{
-    //cout << "rating destroyed" << endl;
-}
+Rating::~Rating(){}
 
 std::istream& operator>>(std::istream &is, Rating &r)
 {
@@ -44,11 +37,11 @@ std::istream& operator>>(std::istream &is, Rating &r)
     int rating;
     char c;
 
-    if(is >> t >> c >> quoted(name) >> c >> quoted(movie_title) >> c >> rating)
-    {
-	r = Rating(t, name, movie_title, rating);
+    if(is >> t >> c >> quoted(name) >> c >> quoted(movie_title) >> c >> rating){
+	    r = Rating(t, name, movie_title, rating);
+    } else {
+        is.clear(ios_base::failbit);
     }
     
-    //delete(t);
     return is;
 }

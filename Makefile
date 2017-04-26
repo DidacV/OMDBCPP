@@ -18,7 +18,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 		fi
 	$(CC) $(CF_FLAGS) $^ $(INC_FLAGS) -c -o $@
 
-program:$(OBJS)
+a:$(OBJS)
 	@if [ ! -d $(BIN_DIR) ]; \
 		then echo "mkdir -p $(BIN_DIR)"; mkdir -p $(BIN_DIR); \
 		fi

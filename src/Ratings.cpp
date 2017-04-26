@@ -9,40 +9,46 @@
 #include <iostream>
 #include <vector>
 #include <set>
-//#include "MovieDatabase.h"
 #include "Ratings.h"
 
 using namespace std;
 
-Ratings::Ratings()
-{
-    //cout << "new ratings" << endl;
-}
+Ratings::Ratings(){}
 
 Ratings::Ratings(const Ratings& orig)
 {
+    rating_list = orig.rating_list;
 }
 
 Ratings::~Ratings()
 {
-    //cout << "ratings destroyed" << endl;
+    rating_list.clear();
 }
 
 istream& operator>>(istream &is, Ratings* &rs)
 {
     string line;
-    stringstream ss;
 
+    int lines_in_file = 0, ratings_added = 0; // Used for log
     while(getline(is, line))
     {
-	//cout << line << endl;
-	Rating r;
-	line.append("\n");
-	ss.str(line);
-	ss >> r;
-	//cout << r;
-	rs->add_rating(r);
+        lines_in_file++;
+        line.append("\n");
+        stringstream ss;
+        ss.str(line);
+
+        Rating r;
+        ss >> r;
+        if (!ss.fail()){
+            rs->add_rating(r);
+            ratings_added++;
+        } else {
+            cerr << "Failed to create rating. At line: " << lines_in_file << " from file." << endl;
+            ss.clear();
+        }
     }
-    
+
+    clog << "Ratings in file: " << lines_in_file << endl
+         << "Ratings added: " << ratings_added << endl;
     return is;
 }
